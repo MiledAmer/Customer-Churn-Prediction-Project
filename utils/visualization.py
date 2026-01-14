@@ -45,3 +45,29 @@ def plot_categorical_distributions(df, cols_to_plot, target_col='Churn'):
         plt.legend(title='Churn Status', loc='upper right')
         plt.tight_layout()
         plt.show()
+
+def plot_numeric_distribution(df, col, target_col='Churn'):
+    """
+    Plots a Kernel Density Estimate (KDE) to compare the distribution 
+    of a numeric feature for Churn vs Non-Churn customers.
+    """
+    plt.figure(figsize=(10, 6))
+    
+    # KDE plot shows the shape of the distribution (smooth histogram)
+    sns.kdeplot(data=df, x=col, hue=target_col, fill=True, palette='viridis')
+    
+    plt.title(f'Distribution of {col} by {target_col} Status')
+    plt.xlabel(col)
+    plt.ylabel('Density')
+    plt.show()
+
+def plot_boxplot(df, x_col, y_col='Churn'):
+    """
+    Plots a boxplot to visualize statistical outliers.
+    - x_col: The categorical column (usually the target 'Churn')
+    - y_col: The numerical column to check for outliers (e.g., 'TotalCharges')
+    """
+    plt.figure(figsize=(8, 6))
+    sns.boxplot(data=df, x=x_col, y=y_col, palette='viridis')
+    plt.title(f'Boxplot of {y_col} by {x_col}')
+    plt.show()
