@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 # Set style globally
 sns.set_style("whitegrid")
@@ -70,4 +71,19 @@ def plot_boxplot(df, x_col, y_col='Churn'):
     plt.figure(figsize=(8, 6))
     sns.boxplot(data=df, x=x_col, y=y_col, palette='viridis')
     plt.title(f'Boxplot of {y_col} by {x_col}')
+    plt.show()
+
+def plot_confusion_matrix(y_true, y_pred, model_name='Model'):
+    """
+    Plots a heatmap of the confusion matrix.
+    """
+    cm = confusion_matrix(y_true, y_pred)
+    
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,
+                xticklabels=['Predicted Loyal', 'Predicted Churn'],
+                yticklabels=['Actual Loyal', 'Actual Churn'])
+    plt.title(f'Confusion Matrix: {model_name}')
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
     plt.show()
