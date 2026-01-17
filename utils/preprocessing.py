@@ -1,5 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 import os
 import pickle
@@ -54,8 +56,10 @@ def encode_binary_target(y, pos_label='Yes', neg_label='No'):
 
 def create_feature_transformer(X):
     """
-    Builds a ColumnTransformer that scales numerical features 
-    and one-hot encodes categorical features.
+    Builds a robust ColumnTransformer that:
+    1. Imputes missing values (Medians for numbers, 'No' for text).
+    2. Scales numerical features.
+    3. One-hot encodes categorical features.
     """
     # 1. Detect Column Types
     num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
@@ -65,11 +69,26 @@ def create_feature_transformer(X):
     print(f" - Scaling {len(num_cols)} numerical cols: {num_cols}")
     print(f" - Encoding {len(cat_cols)} categorical cols: {cat_cols}")
 
-    # 2. Build the Transformer
+    # 2. Define the Pipelines (The "Smart" Logic)
+    
+    # Numeric Pipeline: Fill missing with Median -> Then Scale
+    num_pipeline = Pipeline([
+        ('imputer', SimpleImputer(strategy='median')), 
+        ('scaler', StandardScaler())
+    ])
+
+    # Categorical Pipeline: Fill missing with 'No' -> Then Encode
+    # We use 'No' because in Churn data, missing usually means "Service not active"
+    cat_pipeline = Pipeline([
+        ('imputer', SimpleImputer(strategy='constant', fill_value='No')),
+        ('encoder', OneHotEncoder(drop='first', handle_unknown='ignore', sparse_output=False))
+    ])
+
+    # 3. Build the ColumnTransformer
     transformer = ColumnTransformer(
         transformers=[
-            ('scaler', StandardScaler(), num_cols),
-            ('encoder', OneHotEncoder(drop='first', handle_unknown='ignore', sparse_output=False), cat_cols)
+            ('num', num_pipeline, num_cols),
+            ('cat', cat_pipeline, cat_cols)
         ],
         verbose_feature_names_out=False
     )
