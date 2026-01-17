@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Churn AI Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-900 min-h-screen text-slate-200 p-4 md:p-8 font-sans">
+    <div class="max-w-6xl mx-auto">
+      <div
+        class="flex justify-between items-end mb-8 border-b border-slate-700 pb-4"
+      >
+        <div>
+          <h1 class="text-3xl font-bold text-blue-400">Churn AI Predictor</h1>
+          <p class="text-slate-400 text-sm">
+            Customer Retention Analysis System
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button
+            onclick="clearForm()"
+            class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded text-xs font-bold transition"
+          >
+            Reset
+          </button>
+          <button
+            onclick="fillRandom()"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs font-bold transition"
+          >
+            🎲 Demo Data
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div
+          class="lg:col-span-2 space-y-8 bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl"
+        >
+          <form id="churnForm">
+            <div class="mb-6">
+              <h3
+                class="text-blue-400 font-bold uppercase text-xs tracking-wider mb-4 border-b border-slate-700 pb-1"
+              >
+                Billing & Contract
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="label">Tenure (Months)</label>
+                  <input
+                    type="number"
+                    id="tenure"
+                    class="input-field"
+                    placeholder="e.g. 24"
+                  />
+                </div>
+                <div>
+                  <label class="label">Monthly Charges ($)</label>
+                  <input
+                    type="number"
+                    id="MonthlyCharges"
+                    class="input-field"
+                    placeholder="e.g. 65.00"
+                  />
+                </div>
+                <div>
+                  <label class="label">Total Charges ($)</label>
+                  <input
+                    type="number"
+                    id="TotalCharges"
+                    class="input-field"
+                    placeholder="e.g. 1400.00"
+                  />
+                </div>
+                <div>
+                  <label class="label">Contract Type</label>
+                  <select id="Contract" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Month-to-month</option>
+                    <option>One year</option>
+                    <option>Two year</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Payment Method</label>
+                  <select id="PaymentMethod" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Electronic check</option>
+                    <option>Mailed check</option>
+                    <option>Bank transfer (automatic)</option>
+                    <option>Credit card (automatic)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Paperless Billing</label>
+                  <select id="PaperlessBilling" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <h3
+                class="text-blue-400 font-bold uppercase text-xs tracking-wider mb-4 border-b border-slate-700 pb-1"
+              >
+                Services
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="label">Internet Service</label>
+                  <select id="InternetService" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Fiber optic</option>
+                    <option>DSL</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Phone Service</label>
+                  <select id="PhoneService" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Multiple Lines</label>
+                  <select id="MultipleLines" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Online Security</label>
+                  <select id="OnlineSecurity" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Tech Support</label>
+                  <select id="TechSupport" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Streaming TV</label>
+                  <select id="StreamingTV" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Streaming Movies</label>
+                  <select id="StreamingMovies" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Online Backup</label>
+                  <select id="OnlineBackup" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Device Protection</label>
+                  <select id="DeviceProtection" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3
+                class="text-blue-400 font-bold uppercase text-xs tracking-wider mb-4 border-b border-slate-700 pb-1"
+              >
+                Demographics
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label class="label">Gender</label>
+                  <select id="gender" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Senior Citizen</label>
+                  <select id="SeniorCitizen" class="input-field">
+                    <option value="">Select...</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Partner</label>
+                  <select id="Partner" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Dependents</label>
+                  <select id="Dependents" class="input-field">
+                    <option value="">Select...</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="lg:col-span-1">
+          <div
+            class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl sticky top-8"
+          >
+            <h2 class="text-xl font-bold text-white mb-4">Prediction</h2>
+
+            <button
+              onclick="makePrediction()"
+              class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold py-4 rounded-lg shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2"
+            >
+              <span>⚡</span> Run Analysis
+            </button>
+
+            <div
+              id="result-box"
+              class="hidden mt-6 pt-6 border-t border-slate-700 text-center animate-fade-in"
+            >
+              <div
+                class="text-xs uppercase text-slate-400 font-bold tracking-widest mb-2"
+              >
+                Churn Probability
+              </div>
+
+              <div
+                id="result-percent"
+                class="text-5xl font-black text-white mb-2 tracking-tighter"
+              >
+                --%
+              </div>
+
+              <div
+                id="result-badge"
+                class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-slate-700 text-slate-300"
+              >
+                Waiting...
+              </div>
+
+              <p
+                id="result-msg"
+                class="text-sm text-slate-400 mt-4 leading-relaxed px-2"
+              ></p>
+            </div>
+
+            <div class="mt-8 text-xs text-slate-500 text-center">
+              <p>Model Version 1.0</p>
+              <p>Robust Scaler Active</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 0.25rem;
+      }
+      .input-field {
+        width: 100%;
+        background-color: #1e293b; /* slate-800 darken */
+        border: 1px solid #334155; /* slate-700 */
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+      }
+      .input-field:focus {
+        border-color: #3b82f6; /* blue-500 */
+        background-color: #0f172a; /* slate-900 */
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+    </style>
+
+    <script>
+      const allFields = [
+        "gender",
+        "SeniorCitizen",
+        "Partner",
+        "Dependents",
+        "tenure",
+        "PhoneService",
+        "MultipleLines",
+        "InternetService",
+        "OnlineSecurity",
+        "OnlineBackup",
+        "DeviceProtection",
+        "TechSupport",
+        "StreamingTV",
+        "StreamingMovies",
+        "Contract",
+        "PaperlessBilling",
+        "PaymentMethod",
+        "MonthlyCharges",
+        "TotalCharges",
+      ];
+
+      function clearForm() {
+        document.getElementById("churnForm").reset();
+        document.getElementById("result-box").classList.add("hidden");
+      }
+
+      function fillRandom() {
+        // Numbers
+        document.getElementById("tenure").value =
+          Math.floor(Math.random() * 72) + 1;
+        document.getElementById("MonthlyCharges").value = (
+          Math.random() * 100 +
+          20
+        ).toFixed(2);
+        document.getElementById("TotalCharges").value = (
+          Math.random() * 4000 +
+          100
+        ).toFixed(2);
+
+        // Selects
+        document.querySelectorAll("select").forEach((sel) => {
+          const opts = sel.options;
+          // Pick a random option index > 0 (skip the empty "Select..." option)
+          if (opts.length > 1) {
+            sel.selectedIndex =
+              Math.floor(Math.random() * (opts.length - 1)) + 1;
+          }
+        });
+      }
+
+      async function makePrediction() {
+        const data = {};
+
+        // Gather Data
+        allFields.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && el.value !== "") {
+            data[id] = el.value;
+          } else {
+            data[id] = null; // Send null to let Backend handle defaults
+          }
+        });
+
+        // Button Loading State
+        const btn = document.querySelector(
+          'button[onclick="makePrediction()"]'
+        );
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "<span>⏳</span> Analyzing...";
+        btn.disabled = true;
+
+        try {
+          const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          // UI Updates
+          const box = document.getElementById("result-box");
+          const percent = document.getElementById("result-percent");
+          const badge = document.getElementById("result-badge");
+          const msg = document.getElementById("result-msg");
+
+          box.classList.remove("hidden");
+
+          if (result.error) {
+            percent.innerText = "Error";
+            percent.className = "text-3xl font-bold text-red-500 mb-2";
+            msg.innerText = result.error;
+            return;
+          }
+
+          const prob = (result.churn_probability * 100).toFixed(1);
+          percent.innerText = prob + "%";
+
+          if (result.churn_probability > 0.5) {
+            // High Risk Style
+            percent.className =
+              "text-6xl font-black text-red-500 mb-2 tracking-tighter";
+            badge.className =
+              "inline-block px-4 py-1 rounded-full text-sm font-bold uppercase bg-red-900/30 text-red-400 border border-red-900";
+            badge.innerText = result.advice.title;
+          } else {
+            // Low Risk Style
+            percent.className =
+              "text-6xl font-black text-emerald-400 mb-2 tracking-tighter";
+            badge.className =
+              "inline-block px-4 py-1 rounded-full text-sm font-bold uppercase bg-emerald-900/30 text-emerald-400 border border-emerald-900";
+            badge.innerText = result.advice.title;
+          }
+            msg.innerText = result.advice.message;
+        } catch (err) {
+          alert("Connection Error");
+        } finally {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>
